@@ -2088,7 +2088,7 @@ textarea.form-input::-webkit-resizer {
         position: sticky;
         top: 60px;
         max-height: max-content;
-        height: 52%;
+        /* height: %; */
         margin-bottom: 0;
         padding-top: 60px;
         z-index: 1;
