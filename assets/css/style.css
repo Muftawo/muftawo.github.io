@@ -847,6 +847,30 @@ main {
     margin-bottom: 30px;
 }
 
+/* Style for the button */
+.download-button {
+    border: 2px solid gold;
+    /* Gold borders */
+    padding: 5px 10px;
+    /* Adjust padding as needed */
+    background-color: transparent;
+    /* Transparent background */
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    border-radius: 15px;
+    /* Position for the icon */
+}
+
+/* Style for the download icon */
+.download-button .fa-download {
+    position: absolute;
+    right: 10px;
+    /* Adjust the position of the icon */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 
 /**
  * education and experience 
