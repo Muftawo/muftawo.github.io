@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cement Depot Location Optimization Problem</title>
+</head>
+
+<body>
+    <h1>The Cement Depot Location Optimization Problem</h1>
+    <h2>Introduction</h2>
+    <p>The client, a prominent cement company, operates three plants located in Rajasthan, Madhya Pradesh, and
+        Karnataka. They supply three types of cement to over 1,000 sub-districts across India. Currently, the company
+        manages 100 depots that distribute cement to dealers via a combination of rail and road networks. However, due
+        to recent inorganic expansion, the company is now encountering several issues including;</p>
+    <ul>
+        <li>High logistics costs due to sub-optimal depot locations</li>
+        <li>Inventory management challenges, including frequent stock-outs and excess inventory at depots</li>
+    </ul>
+    <p>To address these challenges, the company needs to optimize its supply chain and identify cost-saving
+        opportunities. A mathematical network optimization model has been developed to determine the optimal locations
+        for new depots, aiming to minimize logistics costs and improve overall efficiency.</p>
+
+    <h2>Key Assumptions</h2>
+    <ol>
+        <li><strong>Plant Distribution</strong>: Each state has one plant.</li>
+        <li><strong>Cement Production</strong>: Each plant produces all three types of cement.</li>
+        <li><strong>Cost of Transportation</strong>: There is a linear relationship between the distance covered and the
+            cost of transportation.</li>
+        <li><strong>Cost Consistency</strong>: The building cost for new depots and the operational cost of existing
+            depots is approximately similar.</li>
+        <li><strong>Traffic and Route Quality</strong>: Traffic flow and route quality are assumed to be similar.</li>
+
+        <li><strong>Distance Constraints</strong>: The table below details the distance constraints:
+            <ul>
+                <li>The serviceability limit of a depot is 30 km.</li>
+                <li>The direct dispatch radius from a plant is 100 km.</li>
+                <li>Cement transported from the plant to sub-districts must adhere to these distance limitations;
+                    otherwise, a penalty cost unit α is incurred for each additional kilometer.</li>
+            </ul>
+        </li>
+        <li> <strong>Market Forces</strong>: We further assume the optimal location for a depot is influenced only by
+            Market factors and any other
+            influence such as varying infrastructure cost, government taxes etc. are constant across sub-districts. The
+            diagram below illustrates this idea.</li>
+
+        <h3>Distance Assumptions Table</h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>From / To</th>
+                    <th>Depot</th>
+                    <th>Rail Depot</th>
+                    <th>Sub-districts</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Plant</td>
+                    <td>> 100 km</td>
+                    <td>> 100 km</td>
+                    <td>
+                        <= 100 km</td>
+                </tr>
+                <tr>
+                    <td>Depot</td>
+                    <td>X</td>
+                    <td>X</td>
+                    <td>
+                        <= 30 km</td>
+                </tr>
+                <tr>
+                    <td>Rail Depot</td>
+                    <td>>= 30 km</td>
+                    <td>X</td>
+                    <td>
+                        <= 30 km</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Distribution Network</h3>
+        <img src="/assets/images/distribution_network_diagram.png" alt="Distribution Network Diagram">
+    </ol>
+
+
+
+    <h2>Mathematical Formulation</h2>
+    <p>To formulate the mathematical representation of the transportation costs based on your scenario, we can define
+        the costs and distances as follows:</p>
+    <ul>
+        <li>plant = p</li>
+        <li>Depot = d</li>
+        <li>Rail Head = rh</li>
+        <li>Sub-district = c</li>
+        <li>Product = pd</li>
+    </ul>
+
+    <p>As shown in the previous diagram we assume a specific cost when each the route is used within the distance
+        constraints. With any extra distance covered resulting to a penalty cost. I begin by examining the scenario
+        where all transportations are within the specified the distance limitations as case 1.</p>
+    <h4>Case 1</h4>
+    <p>I first examine the case where the transportation of products is well within the specific limits implying no
+        further cost results due to distance penalties. Therefore, I sum only the specified transportation cost on each
+        route the product used before arriving at the sub-district.</p>
+    <ul>
+        <li>cost of product(pd) transported = X</li>
+        <li>cost of transport from p to d = A</li>
+        <li>cost of transporting from p to rh = B</li>
+        <li>cost of transporting from p to c = C</li>
+        <li>cost of transporting from rh to c = D</li>
+        <li>cost of transporting from d to c = E</li>
+        <li>cost of transporting from rh to d = F</li>
+    </ul>
+    <h4>Objective function</h4>
+    <p>Min (X * A <sub>p-d</sub> + X * B <sub>p-rh</sub> + X * C<sub>p-c</sub> + X * D<sub>rh-c </sub>+ X *
+        E<sub>d-c</sub> + X * F<sub>rh-d</sub>)</p>
+
+    <!-- <p>Minimize Total Cost = ∑<sub>i</sub>∑<sub>j</sub>∑<sub>m</sub>(C<sub>ij</sub> * X<sub>ijm</sub>) +
+        ∑<sub>j</sub>∑<sub>k</sub>∑<sub>m</sub>(C<sub>jk</sub> * Y<sub>jkm</sub>) +
+        ∑<sub>k</sub>∑<sub>l</sub>∑<sub>m</sub>(C<sub>kl</sub> * Z<sub>klm</sub>)</p> -->
+
+    <h4>Subject to:</h4>
+    <ul>
+        <li>At p, X<sub>p-d</sub> + X <sub> p-rh</sub> + X <sub>p-c</sub> = 1</li>
+        <li>At c, X <sub>p-c</sub> + X <sub>d-c</sub> + X <sub>rh-c</sub> = 1</li>
+        <li>At d, X <sub>p-d</sub>+ X <sub>p-rh</sub> + X <sub>p-c</sub> = 0</li>
+        <li>At rh, X <sub>p-rh</sub> + X <sub>rh-d</sub>+ X <sub>rh-c</sub> = 0</li>
+    </ul>
+
+    <h4>Case 2</h4>
+    <p>In case 2, I examine the scenario where due to demand in certain regions transportation distances of products
+        exceed the serviceability limits thereby resulting in extra cost. In this case, I consider whether building an
+        extra depot in this location will be cost-effective or using the existing network is more cost-efficient. The
+        formula considers the sum of the fixed costs from operating within the distance limits plus a penalty unit cost
+        α for every extra kilometer in distance covered multiplied by an Indicator whether a new depot is needed or not.
+        Plus, the cost β for building a new depot multiplied by an Indicator whether a new depot is needed or not.</p>
+    <p>The binary Indicator for whether a new depot is needed is Iβ &lt; ∑α * PI. Which takes a value of 1 when the cost
+        of a new depot β is less than the sum of the penalty costs incurred due to operating in the location and 0
+        otherwise.</p>
+    <p>A binary indicator PI takes a value of 1 for each extra kilometer covered outside the distance limits and zero if
+        no further kilometer is covered. The total summation (∑ an * PIn) represents the total penalty costs.</p>
+    <h4>Objective Function</h4>
+    <p>MIN (Sum (fixed costs) + Sum (penalty cost * penalty indicator) * new depot indicator + (new depot cost) * new
+        depot indicator)</p>
+    <p>Let,</p>
+    <ul>
+        <li>X be the cost of cement transported</li>
+        <li>Set R represent of all possible routes from plant to sub-district</li>
+        <li>Variable W represent the transportation cost of using a route</li>
+        <li>β the cost of building a new depot</li>
+        <li>α the unit penalty cost for any extra kilometer travelled</li>
+    </ul>
+    <h4>Subject to:</h4>
+    <ul>
+        <li>∑ (Wij)i ∈ R = Ap-d + Bp-rh + Cp-c + Drh-c + Ed-c + Frh-d , ∀i, j ∈ R</li>
+        <li>PIn, I ∈ {0,1}</li>
+        <li>At p, Xp-d + Xp-rh + Xp-c = 1</li>
+        <li>At c, Xp-c + Xd-c + Xrh-c = 1</li>
+        <li>At d, Xp-d + Xp-rh + Xp-c = 0</li>
+        <li>At rh, Xp-rh + Xrh-d + Xrh-c = 0</li>
+    </ul>
+
+    <h2>How S&OP adherence can be improved</h2>
+    <p>There are number of ways S&OP adherence can be improved. To help optimize business procedure. I would improve
+        S&OP adherence by:</p>
+    <ol>
+        <li>Capacity Plan Adherence
+            <p>Measuring the planned quantity of tons cement expected to move through a depot within a period vs the
+                actual quantity that moves will be an effective measure to ensure S&OP adherence. This can be expressed
+                as a ratio of (Planned quantity of cement – Actual quantity of cement)/ Plan quantity of cement. This
+                ratio can help create a baseline by which future planning is estimated.</p>
+        </li>
+        <li>Percentage On-time Delivery to Sub-district
+            <p>Percentage On-time delivery is a good metric in measuring the overall efficiency of the cement supply
+                chain. It will help track the rate of supplies that arrive to sub-districts on time. It is expressed as
+                (planned tons expected in time t – actual tons in time t)/ planned tons expected in time t. This ratio
+                measured within specified windows provided a good measure for our S&OP adherence.</p>
+        </li>
+        <li>Production Plan Adherence
+            <p>Measuring how well production is able to meet plan output is key to maintain tight delivery windows. This
+                can be expressed as a ratio of (planned production – actual production)/ planned production. This can
+                help create a baseline by which we measure future output to ensure S&OP adherence.</p>
+        </li>
+    </ol>
+
+</body>
+
+</html>
